@@ -1,5 +1,5 @@
 //import { DataTypes } from "sequelize"; // Import the built-in data types
-const { DataTypes } = require("sequelize");
+//const { DataTypes } = require("sequelize");
 
 'use strict';
 

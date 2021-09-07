@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       },{
       tableName: "produtos"
     });
-    produtos.associate = function(models) {
+    product.associate = function(models) {
       product.hasOne(models.entryproduct,{
        as:'entrada_produtos',
        foreignKey:'id'
