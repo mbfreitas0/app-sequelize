@@ -21,5 +21,5 @@ module.exports = (sequelize, DataTypes) => {
     };
 
   
-    return EntryProduct;
+    return entryproduct;
   }

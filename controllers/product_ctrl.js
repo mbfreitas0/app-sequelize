@@ -1,140 +1,138 @@
-const {
-    product,
-    entryproduct,
-    Sequelize
-   } = require("../app/models");const Op = Sequelize.Op;let self = {};self.getAll = async (req,res) => {
-    try{
-     let data = await product.findAll({
-      attributes:["id","status", "descricao", "estoque_min", "estoque_max"],
-     });
-     return res.json({
-      status:"ok",
-      data:data
-     })
-    }catch(error){
-     res.status(500).json({
-      status:"error",
-      data:error
-     })
+// Create a new object
+
+exports.create = (req, res) => {
+    // Validate request
+    if (!req.body.descricao) {
+      res.status(400).send({
+        message: "Content can not be empty!"
+      });
+      return;
     }
-   }
-   self.getWithentryproducts = async (req,res) => {
-    try{
-     let data = await product.findAll({
-      attributes:["id","status", "descricao", "estoque_min", "estoque_max"],
-      include:[
-       {
-        model:entryproduct,
-        as:'entrada_produtos',
-        attributes:["id", "id_produto", "qtde", "valor_unitario","data_entrada"]
-       }
-      ]
-     });
-     return res.json({
-      status:"ok",
-      data:data
-     })
-    }catch(error){
-     res.status(500).json({
-      status:"error",
-      data:error
-     })
-    }
-   }
-   self.get = async (req,res) => {
-    try{
-     let id = req.params.id;
-     let data = await product.findOne({
-      attributes:["id","status", "descricao", "estoque_min", "estoque_max"],
-      where:{
-       id:id
-      }
-     });
-     return res.json({
-      status:"ok",
-      data:data
-     })
-    }catch(error){
-     res.status(500).json({
-      status:"error",
-      data:error
-     })
-    }
-   }
-   self.search = async (req,res) => {
-    try{
-     let text = req.query.text;
-     let data = await product.findAll({
-      attributes:["id","status", "descricao", "estoque_min", "estoque_max"],
-      where:{
-       descricao:{
-        [Op.like]:"%"+text+"%"
-       }
-      }
-     });
-     return res.json({
-      status:"ok",
-      data:data
-     })
-    }catch(error){
-     res.status(500).json({
-      status:"error",
-      data:error
-     })
-    }
-   }
-   self.save = async (req,res) => {
-    try{
-     let body = req.body;
-     let data = await product.create(body);
-     return res.json({
-      status:"ok",
-      data:data
-     })
-    }catch(error){
-     res.status(500).json({
-      status:"error",
-      data:error
-     })
-    }
-   }
-   self.update = async (req,res) => {
-    try{
-     let id = req.params.id;
-     let body = req.body;
-     let data = await product.update(body,{
-      where:{
-       id:id
-      }
-     });
-     return res.json({
-      status:"ok",
-      data:data
-     })
-    }catch(error){
-     res.status(500).json({
-      status:"error",
-      data:error
-     })
-    }
-   }
-   self.delete = async (req,res) => {
-    try{
-     let id = req.params.id;
-     let data = await product.destroy({
-      where:{
-       id:id
-      }
-     });
-     return res.json({
-      status:"ok",
-      data:data
-     })
-    }catch(error){
-     res.status(500).json({
-      status:"error",
-      data:error
-     })
-    }
-   }
-   module.exports = self;
+  
+    // Create a Product
+    const product = {
+      status: req.body.status,
+      descricao: req.body.descricao,
+      estoque_min: req.body.estoque_min,
+      estoque_max: req.body.estoque_max,
+      
+    };
+  
+    // Save Product in the database
+    Product.create(Product)
+      .then(data => {
+        res.send(data);
+      })
+      .catch(err => {
+        res.status(500).send({
+          message:
+            err.message || "Some error occurred while creating the Product."
+        });
+      });
+  };
+
+  // Retrieve objects (with condition)
+
+  exports.findAll = (req, res) => {
+    const descricao = req.query.descricao;
+    var condition = descricao ? { descricao: { [Op.like]: `%${descricao}%` } } : null;
+  
+    Product.findAll({ where: condition })
+      .then(data => {
+        res.send(data);
+      })
+      .catch(err => {
+        res.status(500).send({
+          message:
+            err.message || "Some error occurred while retrieving Products."
+        });
+      });
+  };
+
+  // Retrieve a single object
+
+  exports.findOne = (req, res) => {
+    const id = req.params.id;
+  
+    Product.findByPk(id)
+      .then(data => {
+        res.send(data);
+      })
+      .catch(err => {
+        res.status(500).send({
+          message: "Error retrieving Product with id=" + id
+        });
+      });
+  };
+
+  // Find all objects by condition
+
+exports.findAllDescription = (req, res) => {
+  Product.findAll({ where: { descricao: true } })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving Products."
+      });
+    });
+};
+
+
+  // Update an object
+
+  exports.update = (req, res) => {
+    const id = req.params.id;
+  
+    Product.update(req.body, {
+      where: { id: id }
+    })
+      .then(num => {
+        if (num == 1) {
+          res.send({
+            message: "Product was updated successfully."
+          });
+        } else {
+          res.send({
+            message: `Cannot update Product with id=${id}. Maybe Product was not found or req.body is empty!`
+          });
+        }
+      })
+      .catch(err => {
+        res.status(500).send({
+          message: "Error updating Product with id=" + id
+        });
+      });
+  };
+
+  // Delete an object
+
+  exports.delete = (req, res) => {
+    const id = req.params.id;
+  
+    Product.destroy({
+      where: { id: id }
+    })
+      .then(num => {
+        if (num == 1) {
+          res.send({
+            message: "Product was deleted successfully!"
+          });
+        } else {
+          res.send({
+            message: `Cannot delete Product with id=${id}. Maybe Product was not found!`
+          });
+        }
+      })
+      .catch(err => {
+        res.status(500).send({
+          message: "Could not delete Product with id=" + id
+        });
+      });
+  };
+
+
+
+  

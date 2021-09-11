@@ -1,16 +1,28 @@
-const entryproduct_ctrl = require('../controllers/entryproduct_ctrl');
-
-module.exports = function(express) {
-    const route = express.Router();
-
- //entryproduct route
- route.get("/",entryproduct_ctrl.getAll);
- route.get("/:id",entryproduct_ctrl.get);
- route.get("/entryproduct_search",entryproduct_ctrl.search);
- route.post("/",entryproduct_ctrl.save);
- route.put("/:id",entryproduct_ctrl.update);
- route.delete("/:id",entryproduct_ctrl.delete);
- return route;
-
-};
-module.exports = self;
+module.exports = app => {
+    const entryproducts = require("../controllers/entryproduct_ctrl");
+  
+    var router = require("express").Router();
+  
+    // Create a new Tutorial
+    router.post("/", entryproducts.create);
+  
+    // Retrieve all entryproducts
+    router.get("/", entryproducts.findAll);
+  
+    // Retrieve all published entryproducts
+    router.get("/published", entryproducts.findAllProduct);
+  
+    // Retrieve a single Tutorial with id
+    router.get("/:id", entryproducts.findOne);
+  
+    // Update a Tutorial with id
+    router.put("/:id", entryproducts.update);
+  
+    // Delete a Tutorial with id
+    router.delete("/:id", entryproducts.delete);
+  
+    // Delete all entryproducts
+    router.delete("/", entryproducts.deleteAll);
+  
+    app.use('/api/entryproducts', router);
+  };

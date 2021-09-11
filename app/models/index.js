@@ -1,26 +1,25 @@
-const fs = require('fs');
-const path = require('path');
-const Sequelize = require('sequelize');
-const config = require('../../config/database.js');
+const dbConfig = require("../../config/database.js");
 
-const db = {};
-const sequelize = new Sequelize(config);
+const Sequelize = require("sequelize");
+const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
+  host: dbConfig.HOST,
+  dialect: dbConfig.dialect,
+  operatorsAliases: false,
 
-fs
-  .readdirSync(__dirname)
-  .filter(file => (file.indexOf('.') !== 0) && (file !== path.basename(__filename)) && (file.slice(-3) === '.js'))
-  .forEach((file) => {
-    const model = sequelize.import(path.join(__dirname, file));
-    db[model.name] = model;
-  });
-
-Object.keys(db).forEach((modelName) => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
+  pool: {
+    max: dbConfig.pool.max,
+    min: dbConfig.pool.min,
+    acquire: dbConfig.pool.acquire,
+    idle: dbConfig.pool.idle
   }
 });
 
-db.sequelize = sequelize;
+const db = {};
+
 db.Sequelize = Sequelize;
+db.sequelize = sequelize;
+
+db.products = require("./product.js")(sequelize, Sequelize);
+db.products = require("./entryproduct.js")(sequelize, Sequelize);
 
 module.exports = db;

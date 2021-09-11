@@ -1,17 +1,28 @@
-const product_ctrl = require('../controllers/product_ctrl');
+module.exports = app => {
+  const products = require("../controllers/product_ctrl");
 
-module.exports = function(express) {
-    const route = express.Router();
+  var router = require("express").Router();
 
-    //product route
-    route.get("/",product_ctrl.getAll);
-    route.get("/:id",product_ctrl.get);
-    route.get("/product_search",product_ctrl.search);
-    route.post("/",product_ctrl.save);
-    route.put("/:id",product_ctrl.update);
-    route.delete("/:id",product_ctrl.delete);
-    route.get("/product_with_items",product_ctrl.getWithItems);
-    return route;
+  // Create a new Tutorial
+  router.post("/", products.create);
 
+  // Retrieve all products
+  router.get("/", products.findAll);
+
+  // Retrieve all published products
+  router.get("/published", products.findAllDescription);
+
+  // Retrieve a single Tutorial with id
+  router.get("/:id", products.findOne);
+
+  // Update a Tutorial with id
+  router.put("/:id", products.update);
+
+  // Delete a Tutorial with id
+  router.delete("/:id", products.delete);
+
+  // Delete all products
+  //router.delete("/", products.deleteAll);
+
+  app.use('/products', router);
 };
-module.exports = self;
