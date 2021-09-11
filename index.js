@@ -28,8 +28,10 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to m4rcelo application." });
 });
 
-app.use('/products', rotaProdutos);
-app.use('/entryproducts', rotaEntradaProdutos);
+//app.use('/products', rotaProdutos);
+//app.use('/entryproducts', rotaEntradaProdutos);
+require("./routes/product")(app);
+require("./routes/entryproduct")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3000;
