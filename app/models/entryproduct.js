@@ -1,19 +1,19 @@
-module.exports = (sequelize, DataTypes) => {
-    const entryproduct = sequelize.define('entrada_produto', {
+module.exports = (sequelize, Sequelize) => {
+    const EntryProduct = sequelize.define('entrada_produto', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: DataTypes.BIGINT(11)
+        type: Sequelize.BIGINT(11)
       },
-      id_produto: DataTypes.BIGINT(11),
-      qtde: DataTypes.INTEGER,
-      valor_unitario: DataTypes.DECIMAL(9, 2),
-      data_entrada: DataTypes.DATE
+      id_produto: Sequelize.BIGINT(11),
+      qtde: Sequelize.INTEGER,
+      valor_unitario: Sequelize.DECIMAL(9, 2),
+      data_entrada: Sequelize.DATE
     },{
       tableName: "entrada_produtos"
     });
-    entryproduct.associate = function(models) {
+    EntryProduct.associate = function(models) {
       entryproduct.belongsTo(models.product,{
        as:'produtos',
        foreignKey:'id_produto'
@@ -21,5 +21,5 @@ module.exports = (sequelize, DataTypes) => {
     };
 
   
-    return entryproduct;
+    return EntryProduct;
   }

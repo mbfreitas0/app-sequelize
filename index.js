@@ -1,15 +1,13 @@
 const express = require("express");
 const cors = require("cors");
-const rotaProdutos = require('./routes/product');
-const rotaEntradaProdutos = require('./routes/entryproduct');
 
 const app = express();
 
-const db = require("./app/models");
+const db = require("./config/db.config");
 db.sequelize.sync();
-db.sequelize.sync({ force: true }).then(() => {
+/* db.sequelize.sync({ force: true }).then(() => {
     console.log("Drop and re-sync db.");
-  });
+  }); */
 
 var corsOptions = {
   origin: "http://localhost:4200"

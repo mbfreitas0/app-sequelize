@@ -1,13 +1,9 @@
-module.exports = {
-  HOST: "localhost",
-  USER: "root",
-  PASSWORD: "mbf190377",
-  DB: "store",
+const env = {
+  database: "store",
+  username: "admin",
+  password: "mbf190377",
+  host: "localhost",
   dialect: "mysql",
-  pool: {
-    max: 5,
-    min: 0,
-    acquire: 30000,
-    idle: 10000
-  }
 };
+
+module.exports = env;

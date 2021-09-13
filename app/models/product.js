@@ -1,24 +1,24 @@
-module.exports = (sequelize, DataTypes) => {
-  const product = sequelize.define('produtos', {
+module.exports = (sequelize, Sequelize) => {
+  const Product = sequelize.define('produtos', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-      type: DataTypes.BIGINT(11),
+      type: Sequelize.BIGINT(11),
     },
-    status: DataTypes.STRING(1),
-    descricao: DataTypes.STRING,
-    estoque_min: DataTypes.INTEGER,
-    estoque_max: DataTypes.INTEGER,
+    status: Sequelize.STRING(1),
+    descricao: Sequelize.STRING,
+    estoque_min: Sequelize.INTEGER,
+    estoque_max: Sequelize.INTEGER,
   }, {
     tableName: "produtos"
   });
-  product.associate = function (models) {
-    product.hasOne(models.entryproduct, {
+  Product.associate = function (models) {
+    Product.hasOne(models.entryproduct, {
       as: 'entrada_produtos',
       foreignKey: 'id'
     });
   };
 
-  return product;
+  return Product;
 }

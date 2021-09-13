@@ -9,11 +9,8 @@ module.exports = app => {
     // Retrieve all entryproducts
     router.get("/", entryproducts.findAll);
   
-    // Retrieve all published entryproducts
-    router.get("/published", entryproducts.findAllProduct);
-  
     // Retrieve a single Tutorial with id
-    router.get("/:id", entryproducts.findOne);
+    router.get("/:id", entryproducts.findByPk);
   
     // Update a Tutorial with id
     router.put("/:id", entryproducts.update);
@@ -21,8 +18,6 @@ module.exports = app => {
     // Delete a Tutorial with id
     router.delete("/:id", entryproducts.delete);
   
-    // Delete all entryproducts
-    router.delete("/", entryproducts.deleteAll);
-  
-    app.use('/api/entryproducts', router);
+      
+    app.use('/entryproducts', router);
   };
