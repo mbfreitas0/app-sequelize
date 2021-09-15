@@ -11,6 +11,7 @@ module.exports = (sequelize, Sequelize) => {
       valor_unitario: Sequelize.DECIMAL(9, 2),
       data_entrada: Sequelize.DATE
     },{
+      timestamps: false,
       tableName: "entrada_produtos"
     });
     EntryProduct.associate = function(models) {

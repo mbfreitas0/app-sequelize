@@ -11,6 +11,7 @@ module.exports = (sequelize, Sequelize) => {
     estoque_min: Sequelize.INTEGER,
     estoque_max: Sequelize.INTEGER,
   }, {
+    timestamps: false,
     tableName: "produtos"
   });
   Product.associate = function (models) {
