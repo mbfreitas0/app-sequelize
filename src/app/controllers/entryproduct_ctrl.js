@@ -58,4 +58,4 @@ class EntryProductController {
   }
 }
 
-module.exports = new ProductController();
+module.exports = new EntryProductController();
