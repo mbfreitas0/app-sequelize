@@ -21,5 +21,6 @@ db.sequelize = sequelize;
 
 db.products = require("../models/product")(sequelize, Sequelize);
 db.entryproducts = require("../models/entryproduct")(sequelize, Sequelize);
+db.stock = require("../models/stock")(sequelize, Sequelize);
 
 module.exports = db;

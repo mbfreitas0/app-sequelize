@@ -7,7 +7,7 @@ const products = require("../app/controllers/product_ctrl");
 //var router = require("express").Router();
 
 // Create a new Tutorial
-routes.post("/ ", products.store);
+routes.post("/", products.store);
 
 // Retrieve all products
 routes.get("/", products.index);

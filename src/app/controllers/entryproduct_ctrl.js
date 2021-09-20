@@ -1,5 +1,6 @@
 const db = require("../models/");
 const EntryProduct = db.entryproducts;
+const Product = db.products;
 const Op = db.Sequelize.Op;
 
 class EntryProductController {

@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require("cors");
 const rotaProdutos = require('./src/routes/product');
 const rotaEntradaProdutos = require('./src/routes/entryproduct');
+const rotaEstoque = require('./src/routes/stock');
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use(express.json());
 
 app.use('/products', rotaProdutos);
 app.use('/entryproducts', rotaEntradaProdutos);
+app.use('/stock', rotaEstoque);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3000;

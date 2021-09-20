@@ -1,5 +1,7 @@
+const product = require('./product');
+
 module.exports = (sequelize, Sequelize) => {
-    const EntryProduct = sequelize.define('entrada_produto', {
+    const EntryProduct = sequelize.define('entrada_produtos', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -14,8 +16,8 @@ module.exports = (sequelize, Sequelize) => {
       timestamps: false,
       tableName: "entrada_produtos"
     });
-    EntryProduct.associate = function(models) {
-      entryproduct.belongsTo(models.product,{
+    EntryProduct.associate = models => {
+      entryproduct.hasMany(models.product,{
        as:'produtos',
        foreignKey:'id_produto'
       });
