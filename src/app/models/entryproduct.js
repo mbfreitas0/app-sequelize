@@ -17,7 +17,7 @@ module.exports = (sequelize, Sequelize) => {
       tableName: "entrada_produtos"
     });
     EntryProduct.associate = models => {
-      entryproduct.hasMany(models.product,{
+      entryproduct.hasOne(models.stock,{
        as:'produtos',
        foreignKey:'id_produto'
       });

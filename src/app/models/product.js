@@ -14,10 +14,10 @@ module.exports = (sequelize, Sequelize) => {
     timestamps: false,
     tableName: "produtos"
   });
-  Product.associate = function (models) {
-    Product.hasOne(models.entryproduct, {
+  Product.associate = models => {
+    Product.belongsTo(models.entryproduct, {
       as: 'entrada_produtos',
-      foreignKey: 'id'
+      foreignKey: 'id_produto'
     });
   };
 
