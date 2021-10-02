@@ -1,4 +1,5 @@
 const db = require("../models/");
+const product = require("../models/product");
 const Stock = db.stocks;
 const Op = db.Sequelize.Op;
 
@@ -7,7 +8,7 @@ class StockController {
     // Retorna todos os itens do Estoque
     async index(req, res) {
     try {
-      const stocks = await Stock.findAll();
+      const stocks = await Stock.findAll({include: [{ model: Product, as: 'produtos' }]});
 
       return res.json(stocks);
     } catch (err) {

@@ -3,8 +3,19 @@ const cors = require("cors");
 const rotaProdutos = require('./src/routes/product');
 const rotaEntradaProdutos = require('./src/routes/entryproduct');
 const rotaEstoque = require('./src/routes/stock');
+const Product = require('./src/app/models/product');
+const EntryProduct = require('./src/app/models/entryproduct');
+const Stock = require('./src/app/models/stock');
 
 const app = express();
+
+const db = require("./src/app/models");
+db.sequelize.sync();
+
+db.sequelize.sync({ force: false }).then(() => {
+    console.log("Drop and re-sync db.");
+  });
+  
 
 var corsOptions = {
     origin: "http://localhost:4200"

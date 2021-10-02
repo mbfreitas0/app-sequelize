@@ -6,7 +6,7 @@ const Op = db.Sequelize.Op;
 class EntryProductController {
   async index(req, res) {
     try {
-      const entryproducts = await EntryProduct.findAll();
+      const entryproducts = await EntryProduct.findAll({include: ['products']});
 
       return res.json(entryproducts);
     } catch (err) {

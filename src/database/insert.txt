@@ -48,7 +48,7 @@ INSERT INTO `produtos` VALUES
 (47,'A','CABO LEITEIRA MARMICOC LARGO MINI M3',5,15),
 (48,'A','CABO PAN PRESS PENEDO ROCHEDO CORPO LEVE S SUP M3',5,15),
 (49,'A','PESO PAN PRESS CAPA AZ UNIV MINI M10',5,15),
-(50,'A','PESO PAN PRESS CAPA CLOCK NV PR AM M10',5,15)
+(50,'A','PESO PAN PRESS CAPA CLOCK NV PR AM M10',5,15),
 (51,'A','PESO PAN PRESS CAPA CLOCK NV PR AZ M10',5,15),
 (52,'A','CABO LEITEIRA 4F PQ 2046 MCA M3',5,15),
 (53,'A','SELO REPET PAN PRESS SILIC ROCHEDO NIGRO CWA M10',5,15),
@@ -125,7 +125,7 @@ INSERT INTO `entrada_produtos` VALUES
 (40,40,20,2.62,'2021-07-02'),
 (41,41,20,2.81,'2021-07-02'),
 (42,42,20,2.48,'2021-07-02'),
-(43,20,20,2.50,'2021-07-02'),
+(43,43,20,2.50,'2021-07-02'),
 (44,44,20,2.50,'2021-07-02'),
 (45,45,100,1.29,'2021-07-02'),
 (46,46,21,1.90,'2021-07-02'),
@@ -248,7 +248,36 @@ INSERT INTO `estoque` VALUES
 (80,80,20,2.90),
 (81,81,20,2.00);
 
+
+Listar Foreign Keys
+
+SELECT 
+  TABLE_NAME,COLUMN_NAME,CONSTRAINT_NAME, REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME
+FROM
+  INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+WHERE
+  REFERENCED_TABLE_SCHEMA = "store" AND
+  REFERENCED_TABLE_NAME = "produtos" AND
+  REFERENCED_COLUMN_NAME = "id";
+
 // TRIGGER
+
+CREATE TABLE `produtos` (
+`id` BIGINT(11) NOT NULL AUTO_INCREMENT,
+`status` VARCHAR(1) NULL DEFAULT 'A',
+`descricao` VARCHAR(255) NOT NULL,
+`estoque_min` INT(11) NOT NULL,
+`estoque_max` INT(11) NOT NULL,
+ PRIMARY KEY (`id`));
+
+CREATE TABLE `entrada_estoques` (
+`id` BIGINT(11) NOT NULL AUTO_INCREMENT,
+`id_produto` INT(11) NULL DEFAULT NULL,
+`qtde` INT(11) NULL DEFAULT NULL,
+`valor_unitario` DECIMAL(9,2) NULL DEFAULT '0.00',
+`data_entrada` DATE,
+PRIMARY KEY (`id`));
+
 
 CREATE TABLE `estoques` (
 `id` BIGINT(11) NOT NULL AUTO_INCREMENT,
@@ -338,13 +367,13 @@ TABELA “PRODUTO”
 
 A tabela de “PRODUTO” vai conter o cadastro dos produtos que a papelaria vende, nesse exemplo foram criados somente os campos básicos para esse tipo de cadastro, segue abaixo o Script para criação dessa tabela.
 
-CREATE TABLE `produto` (
+CREATE TABLE `produtos` (
 `id` INT(11) NOT NULL AUTO_INCREMENT,
 `status` CHAR(1) NOT NULL DEFAULT 'A',
 `descricao` VARCHAR(50) NULL DEFAULT NULL,
 `estoque_minimo` INT(11) NULL DEFAULT NULL,
 `estoque_maximo` INT(11) NULL DEFAULT NULL,
-PRIMARY KEY (`id`))
+PRIMARY KEY (`id`));
 
 Listagem 1. Script de criação da tabela Produtos
 
@@ -355,13 +384,13 @@ TABELA “ENTRADA_PRODUTO”
 
 Nessa tabela serão gravadas todas as compras de produtos efetuadas para papelaria e através de triggers vamos controlar as inserções na tabela de “ESTOQUE”, segue abaixo o Script para criação dessa tabela.
 
-CREATE TABLE `entrada_produto` (
+CREATE TABLE `entrada_produtos` (
 `id` INT(11) NOT NULL AUTO_INCREMENT,
 `id_produto` INT(11) NULL DEFAULT NULL,
 `qtde` INT(11) NULL DEFAULT NULL,
 `valor_unitario` DECIMAL(9,2) NULL DEFAULT '0.00',
 `data_entrada` DATE NULL DEFAULT NULL,
-PRIMARY KEY (`id`))
+PRIMARY KEY (`id`));
 
 Listagem 2. Script de criação da tabela ENTRADA_PRODUTO
 
@@ -370,25 +399,25 @@ TABELA “ESTOQUE”
 
 Essa tabela somente recebe os dados conforme as ações executadas nas tabelas de “ENTRADA_PRODUTO” e “SAIDA_PRODUTO”. O usuário não tem interação direta como INSERÇÕES, UPDATES E EXCLUSÕES, a tabela “ESTOQUE” é somente o resultado das ações de compra e venda de produtos. Segue abaixo o script para criação dessa tabela.
 
-CREATE TABLE `estoque` (
+CREATE TABLE `estoques` (
 `id` INT(11) NOT NULL AUTO_INCREMENT,
 `id_produto` INT(11) NULL DEFAULT NULL,
 `qtde` INT(11) NULL DEFAULT NULL,
 `valor_unitario` DECIMAL(9,2) NULL DEFAULT '0.00',
-PRIMARY KEY (`id`))
+PRIMARY KEY (`id`));
 
 Listagem 3. Script de criação da tabela ESTOQUE
 TABELA “SAIDA_PRODUTO”
 
 Nessa tabela serão gravadas todas as saídas (Vendas) de produtos e através de triggers essas ações serão refletidas na tabela de “ESTOQUE”. Segue abaixo script para criação dessa tabela.
 
-CREATE TABLE `saida_produto` (
+CREATE TABLE `saida_produtos` (
 `id` INT(11) NOT NULL AUTO_INCREMENT,
 `id_produto` INT(11) NULL DEFAULT NULL,
 `qtde` INT(11) NULL DEFAULT NULL,
 `data_saida` DATE NULL DEFAULT NULL,
 `valor_unitario` DECIMAL(9,2) NULL DEFAULT '0.00',
-PRIMARY KEY (`id`))
+PRIMARY KEY (`id`));
 
 Listagem 4. Script de criação da tabela SAIDA_PRODUTO
 
@@ -456,7 +485,7 @@ TRIGGER “TRG_EntradaProduto_AU”
 Esse trigger será disparado após a atualização de um registro na tabela de “ENTRADA_PRODUTO ”.
 
 DELIMITER //
-CREATE TRIGGER `TRG_EntradaProduto_AU` AFTER UPDATE ON `entrada_produto`
+CREATE TRIGGER `TRG_EntradaProduto_AU` AFTER UPDATE ON `entrada_produtos`
 FOR EACH ROW
 BEGIN
       CALL SP_AtualizaEstoque (new.id_produto, new.qtde - old.qtde, new.valor_unitario);

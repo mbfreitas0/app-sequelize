@@ -1,19 +1,23 @@
+const { DATE } = require('sequelize');
 const Sequelize = require('sequelize');
 const connection = require('../../config/db.config');
-const Product = require('../models/product');
+const Product = require('./product');
 
 module.exports = (sequelize, Sequelize) => {
-    const EntryProduct = sequelize.define('entrada_produtos', {
+    const ProductOutput = sequelize.define('saida_produtos', {
      
       id_produto: Sequelize.INTEGER,
       qtde: Sequelize.INTEGER,
+      data_saida: Sequelize.DATE,
       valor_unitario: Sequelize.DECIMAL(9, 2),
-      data_entrada: Sequelize.DATE
+      
     },{
       timestamps: false,
       
      
     });
-     
-    return EntryProduct;
+    
+
+  
+    return ProductOutput;
   }
